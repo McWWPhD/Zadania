@@ -17,24 +17,52 @@ namespace QueuePriorityZ
         static void Main(string[] args)
         {
 
-            Customer cust1 = new Customer("W","W", 1);
-            Customer cust2 = new Customer("A", "W", 3);
-            Customer cust3 = new Customer("E", "W", 3);
+            Customer cust1 = new Customer("A","A", 1);
+            Customer cust2 = new Customer("A", "B", 3);
+            Customer cust3 = new Customer("A", "C", 3);
+            Customer cust4 = new Customer("A", "D", 2);
+            
+            QueuePriority kolejka = new QueuePriority();
 
-            QueuePriority queue = new QueuePriority(List<Customer> queue);
+            kolejka.Enqueqe(cust1);
+            kolejka.Enqueqe(cust2);
+            kolejka.Enqueqe(cust3);
+            kolejka.Enqueqe(cust4);
+            
+            Hashtable infoQueue = kolejka.queueStat();
 
 
+            Console.WriteLine("Ilość osób w kolejece: " + kolejka.queueCustomers()+"\n" );
 
+            foreach (DictionaryEntry entry in infoQueue)
+            {
+                Console.WriteLine("Osób z priorytetem {0}: {1}", (string)entry.Key, entry.Value);
+            }
+            Console.WriteLine("--------------");
+
+
+            Console.WriteLine("Ilość osób w kolejece po Dequeue: " + kolejka.Dequeue() + "\n");
+
+            infoQueue = kolejka.queueStat();
+
+            foreach (DictionaryEntry entry in infoQueue)
+            {
+                Console.WriteLine("Osób z priorytetem {0}: {1}", (string)entry.Key, entry.Value);
+            }
+            Console.WriteLine("--------------");
+
+            Console.ReadKey();
+                        
         }
     }
     //- konstruktor QueuePriority inicjalizującą kolejkę
-    public class QueuePriority
+    public class QueuePriority 
     {
-        private List<Customer> queue = new List<Customer>();
+        List<Customer> queue;
 
-        public QueuePriority(List<Customer> queue)            
+        public QueuePriority()            
         {
-            this.queue = queue;
+          queue =  new List<Customer>();
         }
 
 
@@ -44,48 +72,74 @@ namespace QueuePriorityZ
             queue.Add(customer);
         }
 
+
         //- metodę Dequeue pobierająca element(obiekt klasy Customer) o największej wartości pola priority dla listy obiektu klasy Customer przechowywanej przez QueuePriority, jeśli już nic nie ma w kolejce proszę zwracać null
-        public void Dequeue(Customer customer)
-        {                              
-            queue.Remove(customer);
+        public object Dequeue()
+        {
+            int maxPriority = 0;
+
+            foreach (var client in queue)
+            {
+                if (client.GetPriority() > maxPriority)
+                {
+                    maxPriority = client.GetPriority();
+                }
+                             
+            }
+
+            foreach (var client in queue.ToList())
+            {
+                if (client.GetPriority()==maxPriority)
+                    
+                {
+                    queue.Remove(client);
+                }
+            }
+
+            if (queue.Count() > 0)
+            {
+                return queue.Count();
+            } else
+
+                return null;
         }
 
 
         //- metodę pobierającą informację ile elementów jest w kolejce
-        public int queueCustomers (Customer customer)
+        public int queueCustomers ()
         {
             return queue.Count();
         }
 
 
         //- metodę pobierającą statystykę kolejki - zwracana jest informacja w formie tablicy hashującej na temat liczby obiektów z danymi wartościami priorytetu
-        public Hashtable queueStat (List<Customer> queue)
+        public Hashtable queueStat ()
         {
-            int numberOfP1= 0, numberOfP2=0, numberOfP3=0;
-
+            int numberOfP1 =0, numberOfP2=0, numberOfP3=0;
+            
             Hashtable statInfo = new Hashtable();
-            
-            statInfo.Add("Klientów z Priorytetem 1: ", numberOfP1);
-            statInfo.Add("Klientów z Priorytetem 2: ", numberOfP2);
-            statInfo.Add("Klientów z Priorytetem 3: ", numberOfP3);
-            
-            foreach (var item in queue)
+
+            foreach (var client in queue)
             {
-                if (item.GetPriority() == 1)
+                if (client.GetPriority() == 1)
                 {
-                    numberOfP1++;
+                    numberOfP1++;                    
                 }
                 
-                if (item.GetPriority() == 2)
+                if (client.GetPriority() == 2)
                 {
                     numberOfP2++;
                 }
 
-                if (item.GetPriority() == 3)
+                if (client.GetPriority() == 3)
                 {
                     numberOfP3++;
                 }
             }
+
+            statInfo.Add("1", numberOfP1);
+            statInfo.Add("2", numberOfP2);
+            statInfo.Add("3", numberOfP3);
 
             return statInfo;
         }
