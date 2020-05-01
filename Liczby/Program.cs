@@ -27,60 +27,54 @@ Z tej tablicy/listy wartości liczymy takie rzeczy jak: wartość minimalna, war
                 numbers.Add(Convert.ToInt32(number));
             }
 
-            //foreach (var number in numbers)
-            //{
-
-            //    Console.WriteLine(number);
-            //}
-
             Console.WriteLine();
 
 
             //wartość minimalna
 
-            Console.WriteLine( "Minimalna wartość to: " + numbers.Min() + "\n");
+            Console.WriteLine( "Minimalna wartość: " + numbers.Min() + "\n");
 
             
             //wartość maks. 
 
-            Console.WriteLine( "Maksymalna wartość to: "+ numbers.Max() + "\n");
+            Console.WriteLine( "Maksymalna wartość: "+ numbers.Max() + "\n");
 
             
             //średnia arytmetyczna
 
-            Console.WriteLine( "Średnia arytmetyczna to: " + numbers.Average() + "\n");
+            Console.WriteLine( "Średnia arytmetyczna: " + numbers.Average() + "\n");
 
             //mediana
-            int medianaNumber=0; 
+            int medianNumber=0; 
             numbers.Sort();
 
             if (numbers.Count() % 2 != 0)
             {
-                medianaNumber = (numbers.Count() + 1) / 2;
-                Console.WriteLine("Mediana wynosi: " + numbers[medianaNumber - 1]);
+                medianNumber = (numbers.Count() + 1) / 2;
+                Console.WriteLine("Mediana: " + numbers[medianNumber - 1]);
             }
             else if (numbers.Count() % 2 == 0)
             {
-                medianaNumber = (numbers.Count() + 1) / 2;
+                medianNumber = (numbers.Count() + 1) / 2;
 
-                double mediana = ((double)numbers[medianaNumber - 1] + (double)numbers[medianaNumber]) / 2;
+                double median = ((double)numbers[medianNumber - 1] + (double)numbers[medianNumber]) / 2;
 
-                Console.WriteLine("Mediana wynosi: " + mediana);
+                Console.WriteLine("Mediana: " + median);
             }
+            Console.WriteLine();
 
 
             //odchylenie standardowe
-            double licznik = 0;
+            double numerator = 0;
 
             for (int i = 0; i < numbers.Count(); i++)
             {
-
-                licznik += (numbers[i] + numbers.Average()) * (numbers[i] + numbers.Average());
+                numerator += Math.Pow((numbers[i] - numbers.Average()),2);
             }
 
-            double odchylenieStandardowe = Math.Sqrt(licznik / numbers.Count());
+            double standardDeviation = Math.Sqrt(numerator / numbers.Count());
 
-            Console.WriteLine("Odchylenie standardowe wynosi: {0:5}",+ odchylenieStandardowe);
+            Console.WriteLine("Odchylenie standardowe: {0:#.00}", standardDeviation);
         }
     }
 }
