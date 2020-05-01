@@ -18,25 +18,33 @@ namespace QueuePriorityZ
         {
 
             Customer cust1 = new Customer("A","A", 1);
-            Customer cust2 = new Customer("A", "B", 3);
+            Customer cust2 = new Customer("A", "B", 2);
             Customer cust3 = new Customer("A", "C", 3);
-            Customer cust4 = new Customer("A", "D", 2);
-            
+            Customer cust4 = new Customer("A", "D", 1);
+            Customer cust5 = new Customer("A", "D", 4);
+            Customer cust6 = new Customer("A", "D", 5);
+            Customer cust7 = new Customer("A", "D", 5);
+
             QueuePriority kolejka = new QueuePriority();
 
             kolejka.Enqueqe(cust1);
             kolejka.Enqueqe(cust2);
             kolejka.Enqueqe(cust3);
             kolejka.Enqueqe(cust4);
+            kolejka.Enqueqe(cust5);
+            kolejka.Enqueqe(cust6);
+            kolejka.Enqueqe(cust7);
+
             
+
             Hashtable infoQueue = kolejka.queueStat();
 
-
+            
             Console.WriteLine("Ilość osób w kolejece: " + kolejka.queueCustomers()+"\n" );
 
             foreach (DictionaryEntry entry in infoQueue)
             {
-                Console.WriteLine("Osób z priorytetem {0}: {1}", (string)entry.Key, entry.Value);
+                Console.WriteLine("Klientów z priorytetem {0} : {1}", entry.Key, entry.Value);
             }
             Console.WriteLine("--------------");
 
@@ -47,7 +55,8 @@ namespace QueuePriorityZ
 
             foreach (DictionaryEntry entry in infoQueue)
             {
-                Console.WriteLine("Osób z priorytetem {0}: {1}", (string)entry.Key, entry.Value);
+
+                Console.WriteLine("Klientów z priorytetem {0} : {1}", entry.Key,  entry.Value);
             }
             Console.WriteLine("--------------");
 
@@ -115,31 +124,31 @@ namespace QueuePriorityZ
         //- metodę pobierającą statystykę kolejki - zwracana jest informacja w formie tablicy hashującej na temat liczby obiektów z danymi wartościami priorytetu
         public Hashtable queueStat ()
         {
-            int numberOfP1 =0, numberOfP2=0, numberOfP3=0;
-            
+            byte maxPriority = 0;
             Hashtable statInfo = new Hashtable();
-
-            foreach (var client in queue)
+            
+            foreach (var priority in queue)
             {
-                if (client.GetPriority() == 1)
+                if (priority.GetPriority()>maxPriority)
                 {
-                    numberOfP1++;                    
-                }
-                
-                if (client.GetPriority() == 2)
-                {
-                    numberOfP2++;
-                }
-
-                if (client.GetPriority() == 3)
-                {
-                    numberOfP3++;
+                    maxPriority = (byte)priority.GetPriority();
                 }
             }
 
-            statInfo.Add("1", numberOfP1);
-            statInfo.Add("2", numberOfP2);
-            statInfo.Add("3", numberOfP3);
+            for (int i = 1; i <= maxPriority; i++)
+            {
+            int numberOfClientsWithPriority = 0;
+
+                foreach (var priority in queue)
+                {
+                    if (priority.GetPriority() == i)
+                    {
+                        numberOfClientsWithPriority++;
+                    }
+                }
+
+                statInfo.Add(i, numberOfClientsWithPriority);
+            }
 
             return statInfo;
         }
